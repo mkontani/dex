@@ -89,6 +89,11 @@ var (
 			// Change default timestamp to fit datetime.
 			{regexp.MustCompile(`0001-01-01 00:00:00 UTC`), "1000-01-01 00:00:00"},
 		},
+
+		lockForUpdate: func(tx *trans, table, column, value string) error {
+			_, err := tx.Exec("SELECT 1 FROM "+table+" WHERE "+column+" = $1 FOR UPDATE;", value)
+			return err
+		},
 	}
 )
 
